@@ -13,9 +13,7 @@ class Field {
         this.playerRow = 0;
         this.playerCol = 0;
     }
-
-    
-
+    // выводит на терминал текущее состояние поля
     print() {
         // соеденяю вложенные массивы
         const joinedArray = this.field.map(innerArray => innerArray.join(''));
@@ -28,15 +26,28 @@ class Field {
         const randomCol = Math.floor(Math.random() * this.cols);
         this.field[randomRow][randomCol] = '^';
     }
+    //генератор дыр на поле
+    generateHoles() {
+        const numHoles = Math.floor(this.rows * this.cols * 0.3); //30% от поверхности поля
+        for(let i = 0; i < numHoles; i++) {
+            let randomRow, randomCol;
+            do {
+                randomRow = Math.floor(Math.random() * this.rows);
+                randomCol = Math.floor(Math.random() * this.cols);
+            } while (this.field[randomRow][randomCol] === '^' || this.field[randomRow][randomCol] === '0');
+            this.field[randomRow][randomCol] = '0';
+        }
+    }
 }
 
 
 
 const myField = new Field([
-    ['*', '░', 'O'],
-    ['░', 'O', '░'],
+    ['░', '░', '░'],
+    ['░', '░', '░'],
     ['░', '░', '░']
 ]);
 
 myField.generateHat();
+myField.generateHoles();
 myField.print();
