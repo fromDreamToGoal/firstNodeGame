@@ -75,16 +75,51 @@ class Field {
         //актуальное положение
         this.field[this.playerRow][this.playerCol] = '*';
     }
+
+    play() {
+        while (true) {
+            this.print();
+            const direction = prompt('Which direction would you like to move? (up/down/left/right): ');
+            this.move(direction);
+            console.log('');
+            if(!direction || this.field[this.playerRow][this.playerCol] === '^' || this.field[this.playerRow][this.playerCol] === '0') {
+                break;
+            }
+        }
+    }
+
+    static generateField(height, width, percentHoles) {
+        const field = [];
+        const numTiles = height * width;
+        const numHoles = Math.floor(numTiles * percentHoles / 100);
+        const numEmptyTiles = numTiles - numHoles - 1; // Subtract 1 for the hat
+        
+        // Initialize field with empty tiles
+        for (let i = 0; i < height; i++) {
+            field.push(Array(width).fill('░'));
+        }
+
+        // Place the hat at a random location
+        const hatRow = Math.floor(Math.random() * height);
+        const hatCol = Math.floor(Math.random() * width);
+        field[hatRow][hatCol] = '^';
+
+        // Place holes at random locations
+        let placedHoles = 0;
+        while (placedHoles < numHoles) {
+            const row = Math.floor(Math.random() * height);
+            const col = Math.floor(Math.random() * width);
+            if (field[row][col] === '░' && !(row === 0 && col === 0)) {
+                field[row][col] = 'O';
+                placedHoles++;
+            }
+        }
+        return field;
+    }
 }
 
 
 
-const myField = new Field([
-    ['░', '░', '░'],
-    ['░', '░', '░'],
-    ['░', '░', '░']
-]);
+const myField = new Field(Field.generateField(55, 1, 5));
 
-myField.generateHat();
-myField.generateHoles();
-myField.print();
+myField.play();
