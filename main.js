@@ -38,6 +38,43 @@ class Field {
             this.field[randomRow][randomCol] = '0';
         }
     }
+
+    move(direction) {
+        //определение направления движения
+        switch (direction.toLowerCase()) {
+            case 'up':
+                this.playerRow--;
+                break;
+            case 'down':
+                this.playerRow++;
+                break;
+            case 'left':
+                this.playerCol--;
+                break;
+            case 'right':
+                this.playerCol++;
+                break;
+            default:
+                console.log('Invalid direction! Please enter up, down, left, or right.');
+                return;
+        }
+        //определяет не вышел ли игрок за поля
+        if(this.playerRow < 0 || this.playerRow >= this.rows || this.playerCol < 0 || this.playerCol >= this.cols) {
+            console.log('Out of bounds! Game over.');
+            return;
+        }
+        //определяет выиграл ли игрок или попал в дыру
+        const tile = this.field[this.playerRow][this.playerCol];
+        if(tile === '^') {
+            console.log('Congratulations! You found the hat!');
+            return;
+        } else if (tile === '0') {
+            console.log('Oops! You fell into a hole! Game over.');
+            return;
+        }
+        //актуальное положение
+        this.field[this.playerRow][this.playerCol] = '*';
+    }
 }
 
 
